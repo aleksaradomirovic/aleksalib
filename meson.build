@@ -23,4 +23,5 @@ if build_tests
     gtest = declare_dependency(dependencies: [ gtest_dep, gtest_main_dep ])
 endif
 
+subdir('modules/filesystem')
 subdir('modules/struct')
