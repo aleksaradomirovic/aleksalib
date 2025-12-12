@@ -28,7 +28,7 @@ void queue_free(struct queue *__restrict__ queue);
 int queue_enqueue(struct queue *__restrict__ queue, const void *__restrict__ data, size_t data_size);
 int queue_dequeue(struct queue *__restrict__ queue, void *__restrict__ data, size_t data_size);
 
-bool queue_empty(struct queue *__restrict__ queue);
+bool queue_empty(const struct queue *__restrict__ queue);
 
 
 #ifdef __cplusplus

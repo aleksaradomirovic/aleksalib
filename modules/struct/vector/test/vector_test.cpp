@@ -36,6 +36,7 @@ TEST(vector_list, allocate) {
     ASSERT_EQ(vector_list_append(&list, &ptr, 1, 10), 0);
     EXPECT_NE(ptr, nullptr);
     EXPECT_EQ(list.count, 10);
+    EXPECT_EQ(vector_list_elements(&list, 10), 1);
     EXPECT_NE(list.vector.data, nullptr);
     EXPECT_GE(list.vector.size, 10);
     vector_list_free(&list);
@@ -48,6 +49,7 @@ TEST(vector_list, allocate_multi) {
     EXPECT_NE(ptr[0], nullptr);
     EXPECT_NE(ptr[1], nullptr);
     EXPECT_EQ(list.count, 20);
+    EXPECT_EQ(vector_list_elements(&list, 10), 2);
     EXPECT_NE(list.vector.data, nullptr);
     EXPECT_GE(list.vector.size, 20);
     vector_list_free(&list);

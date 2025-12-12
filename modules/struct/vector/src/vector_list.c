@@ -43,3 +43,7 @@ int vector_list_append(struct vector_list *__restrict__ list, void **__restrict_
     }
     return 0;
 }
+
+size_t vector_list_elements(const struct vector_list *__restrict__ list, size_t size) {
+    return list->count / size;
+}

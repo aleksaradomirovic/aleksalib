@@ -113,6 +113,6 @@ int queue_dequeue(struct queue *__restrict__ queue, void *__restrict__ data, siz
     return 0;
 }
 
-bool queue_empty(struct queue *__restrict__ queue) {
+bool queue_empty(const struct queue *__restrict__ queue) {
     return !(queue->head);
 }

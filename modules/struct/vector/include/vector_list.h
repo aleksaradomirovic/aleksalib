@@ -26,6 +26,8 @@ void vector_list_free(struct vector_list *__restrict__ list);
 
 int vector_list_append(struct vector_list *__restrict__ list, void **__restrict__ ptr, size_t count, size_t size);
 
+size_t vector_list_elements(const struct vector_list *__restrict__ list, size_t size);
+
 
 #ifdef __cplusplus
 }
