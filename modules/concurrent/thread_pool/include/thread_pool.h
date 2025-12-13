@@ -23,7 +23,6 @@ struct task {
 
 struct thread_pool {
     struct vector_list threads;
-    struct task task;
 };
 
 int thread_pool_init(struct thread_pool *__restrict__ thread_pool, size_t nproc, void (*task_routine)(void *arg), void *task_arg);
