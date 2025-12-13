@@ -6,7 +6,9 @@
 #include "vector_list.h"
 
 #include <errno.h>
+#include <stdbit.h>
 #include <stdckdint.h>
+#include <stdint.h>
 
 void vector_list_init(struct vector_list *__restrict__ list) {
     *list = VECTOR_LIST_INITIALIZER;
@@ -15,6 +17,21 @@ void vector_list_init(struct vector_list *__restrict__ list) {
 void vector_list_free(struct vector_list *__restrict__ list) {
     vector_free(&list->vector);
     *list = VECTOR_LIST_INITIALIZER;
+}
+
+static int vector_list_guarantee_underlying_size(struct vector *__restrict__ vector, size_t size) {
+    size_t underlying_size = size;
+    if(underlying_size > 0) {
+        unsigned int high_bit = stdc_first_leading_one(underlying_size) - 1;
+        high_bit = SIZE_WIDTH - high_bit;
+        if(high_bit == SIZE_WIDTH - 1) {
+            underlying_size = SIZE_MAX;
+        } else {
+            underlying_size = (1 << high_bit);
+        }
+    }
+
+    return vector_guarantee_size(vector, underlying_size);
 }
 
 int vector_list_append(struct vector_list *__restrict__ list, void **__restrict__ ptr, size_t count, size_t size) {
@@ -30,7 +47,7 @@ int vector_list_append(struct vector_list *__restrict__ list, void **__restrict_
     }
 
     int status;
-    status = vector_guarantee_size(&list->vector, total_size);
+    status = vector_list_guarantee_underlying_size(&list->vector, total_size);
     if(status) {
         return status;
     }
