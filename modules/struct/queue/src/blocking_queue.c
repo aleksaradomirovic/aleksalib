@@ -18,7 +18,7 @@ void blocking_queue_free(struct blocking_queue *__restrict__ queue) {
     *queue = BLOCKING_QUEUE_INITIALIZER;
 }
 
-int blocking_queue_enqueue(struct blocking_queue *__restrict__ queue, const void *__restrict__ data, size_t data_size) {
+int blocking_queue_enqueue(struct blocking_queue *queue, const void *__restrict__ data, size_t data_size) {
     int pthread_status, status;
     pthread_status = pthread_mutex_lock(&queue->mutex);
     if(pthread_status) {
@@ -40,7 +40,7 @@ int blocking_queue_enqueue(struct blocking_queue *__restrict__ queue, const void
     return status;
 }
 
-int blocking_queue_trydequeue(struct blocking_queue *__restrict__ queue, void *__restrict__ data, size_t data_size) {
+int blocking_queue_trydequeue(struct blocking_queue *queue, void *__restrict__ data, size_t data_size) {
     int pthread_status, status;
     pthread_status = pthread_mutex_lock(&queue->mutex);
     if(pthread_status) {
@@ -57,7 +57,7 @@ int blocking_queue_trydequeue(struct blocking_queue *__restrict__ queue, void *_
     return status;
 }
 
-int blocking_queue_dequeue(struct blocking_queue *__restrict__ queue, void *__restrict__ data, size_t data_size) {
+int blocking_queue_dequeue(struct blocking_queue *queue, void *__restrict__ data, size_t data_size) {
     int pthread_status, status;
     pthread_status = pthread_mutex_lock(&queue->mutex);
     if(pthread_status) {

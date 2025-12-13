@@ -5,4 +5,5 @@ filesystem = declare_dependency(sources: [ 'src/directory.c' ], include_director
 
 if build_tests
     filesystem_test = executable('filesystem_test', 'test/filesystem_test.cpp', dependencies: [ filesystem, gtest ])
+    test('filesystem_test', filesystem_test)
 endif

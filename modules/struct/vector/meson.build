@@ -5,4 +5,5 @@ vector = declare_dependency(sources: [ 'src/vector.c', 'src/vector_list.c' ], in
 
 if build_tests
     vector_test = executable('vector_test', 'test/vector_test.cpp', dependencies: [ vector, gtest ])
+    test('vector_test', vector_test)
 endif

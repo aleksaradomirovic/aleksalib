@@ -5,4 +5,5 @@ queue = declare_dependency(sources: [ 'src/queue.c', 'src/blocking_queue.c' ], i
 
 if build_tests
     queue_test = executable('queue_test', 'test/queue_test.cpp', dependencies: [ queue, gtest ])
+    test('queue_test', queue_test)
 endif

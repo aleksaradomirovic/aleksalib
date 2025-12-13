@@ -27,9 +27,9 @@ struct blocking_queue {
 void blocking_queue_init(struct blocking_queue *__restrict__ queue);
 void blocking_queue_free(struct blocking_queue *__restrict__ queue);
 
-int blocking_queue_enqueue(struct blocking_queue *__restrict__ queue, const void *__restrict__ data, size_t data_size);
-int blocking_queue_dequeue(struct blocking_queue *__restrict__ queue, void *__restrict__ data, size_t data_size);
-int blocking_queue_trydequeue(struct blocking_queue *__restrict__ queue, void *__restrict__ data, size_t data_size);
+int blocking_queue_enqueue(struct blocking_queue *queue, const void *__restrict__ data, size_t data_size);
+int blocking_queue_dequeue(struct blocking_queue *queue, void *__restrict__ data, size_t data_size);
+int blocking_queue_trydequeue(struct blocking_queue *queue, void *__restrict__ data, size_t data_size);
 
 
 #ifdef __cplusplus
