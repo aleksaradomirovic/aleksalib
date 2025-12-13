@@ -7,12 +7,14 @@
 #define DIRECTORY_H_
 
 
+#include <dirent.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
-int directory_iterate_at(int dirfd, int (*foreach)(const char *__restrict__ path, int dirfd));
+int directory_foreach(DIR *dirp, int (*visitor)(const char *__restrict__ path, void *arg), void *arg);
 
 
 #ifdef __cplusplus

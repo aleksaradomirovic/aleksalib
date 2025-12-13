@@ -47,3 +47,15 @@ int vector_list_append(struct vector_list *__restrict__ list, void **__restrict_
 size_t vector_list_elements(const struct vector_list *__restrict__ list, size_t size) {
     return list->count / size;
 }
+
+int vector_list_foreach(struct vector_list *__restrict__ list, int (*visitor)(void *element, void *arg), size_t size, void *arg) {
+    size_t count = vector_list_elements(list, size);
+    for(size_t i = 0; i < count; i++) {
+        int status = visitor(list->vector.data + (i * size), arg);
+        if(status) {
+            return status;
+        }
+    }
+
+    return 0;
+}

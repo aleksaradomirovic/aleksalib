@@ -9,24 +9,7 @@
 #include <dirent.h>
 #include <unistd.h>
 
-int directory_iterate_at(int dirfd, int (*foreach)(const char *__restrict__ path, int dirfd)) {
-    DIR *dirp;
-    {
-        int fd = dup(dirfd);
-        if(fd < 0) {
-            __builtin_assume(errno);
-            return errno;
-        }
-
-        dirp = fdopendir(fd);
-        if(!dirp) {
-            int err = errno;
-            __builtin_assume(err);
-            close(fd);
-            return err;
-        }
-    }
-
+int directory_foreach(DIR *dirp, int (*visitor)(const char *__restrict__ path, void *arg), void *arg) {
     while(true) {
         errno = 0;
         struct dirent *entry = readdir(dirp);
@@ -40,7 +23,7 @@ int directory_iterate_at(int dirfd, int (*foreach)(const char *__restrict__ path
             break;
         }
 
-        int status = foreach(entry->d_name, dirfd);
+        int status = visitor(entry->d_name, arg);
         if(status) {
             closedir(dirp);
             return status;
