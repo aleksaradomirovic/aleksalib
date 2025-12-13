@@ -10,14 +10,21 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define QUEUE_NODE_MIN_SIZE (256)
+
 struct queue_node {
     struct queue_node *next;
+    size_t head, tail;
     unsigned char data[];
 };
 
-#define QUEUE_NODE_INITIALIZER (struct queue_node) { .next = NULL }
+#define QUEUE_NODE_INITIALIZER (struct queue_node) { .next = NULL, .head = 0, .tail = 0 }
 
 static int queue_node_alloc(struct queue_node **node_ptr, size_t data_size) {
+    if(data_size < QUEUE_NODE_MIN_SIZE) {
+        data_size = QUEUE_NODE_MIN_SIZE;
+    }
+
     size_t alloc_size;
     if(ckd_add(&alloc_size, data_size, sizeof(struct queue_node))) {
         return EOVERFLOW;
@@ -83,33 +90,37 @@ void queue_free(struct queue *__restrict__ queue) {
 }
 
 int queue_enqueue(struct queue *__restrict__ queue, const void *__restrict__ data, size_t data_size) {
-    struct queue_node *node;
-    int status = queue_node_alloc(&node, data_size);
-    if(status) {
-        return status;
+    struct queue_node *tail = queue->tail;
+    if(!tail || tail->tail >= QUEUE_NODE_MIN_SIZE || QUEUE_NODE_MIN_SIZE - tail->tail > data_size) {
+        int status = queue_node_alloc(&tail, data_size);
+        if(status) {
+            return status;
+        }
+        queue_enqueue_node(queue, tail);
     }
 
     if(data) {
-        memcpy(node->data, data, data_size);
-    } else {
-        memset(node->data, 0, data_size);
+        memcpy(tail->data + tail->tail, data, data_size);
     }
-
-    queue_enqueue_node(queue, node);
+    tail->tail += data_size;
     return 0;
 }
 
 int queue_dequeue(struct queue *__restrict__ queue, void *__restrict__ data, size_t data_size) {
-    struct queue_node *node = queue_dequeue_node(queue);
-    if(!node) {
+    struct queue_node *head = queue->head;
+    if(!head) {
         return EWOULDBLOCK;
     }
 
     if(data) {
-        memcpy(data, node->data, data_size);
+        memcpy(data, head->data + head->head, data_size);
+    }
+    head->head += data_size;
+    if(head->head >= head->tail) {
+        queue_dequeue_node(queue);
+        free(head);
     }
 
-    queue_node_free(node);
     return 0;
 }
 
