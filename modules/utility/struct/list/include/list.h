@@ -27,7 +27,7 @@ int list_add_tail(struct list *restrict list, const void *restrict element_ptr, 
 int list_remove_head(struct list *restrict list, void *restrict element_ptr, size_t element_size);
 int list_remove_tail(struct list *restrict list, void *restrict element_ptr, size_t element_size);
 
-int list_foreach(struct list *restrict list, iterator_t *iterator_function, void *iterator_arg, size_t element_size);
+void list_foreach(struct list *restrict list, iterator_t *iterator_function, void *iterator_arg, size_t element_size);
 
 
 #endif

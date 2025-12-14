@@ -86,7 +86,7 @@ int list_add_tail(struct list *restrict list, const void *restrict element_ptr, 
     return 0;
 }
 
-int list_foreach(struct list *restrict list, iterator_t *iterator_function, void *iterator_arg, size_t element_size) {
+void list_foreach(struct list *restrict list, iterator_t *iterator_function, void *iterator_arg, size_t element_size) {
     for(struct list_node *node = list->head; node; node = node->next) {
         if(node->tail - node->head < element_size) {
             continue;
@@ -96,14 +96,12 @@ int list_foreach(struct list *restrict list, iterator_t *iterator_function, void
             enum iterator_command cmd = iterator_function(node->data + iter_pos, iterator_arg);
             switch(cmd) {
                 case ITERATOR_STOP:
-                    return 0;
+                    return;
                 case ITERATOR_NEXT:
                     break;
                 default:
-                    return ENOTSUP;
+                    return;
             }
         }
     }
-
-    return 0;
 }
