@@ -13,6 +13,8 @@ if not meson.is_subproject()
     add_languages('cpp', required: true, native: false)
     gtest = dependency('gtest', fallback: 'gtest', native: false)
     gtest_main = dependency('gtest_main', fallback: 'gtest', native: false)
+else
+    build_tests = false
 endif
 
 subdir('modules/utility')
